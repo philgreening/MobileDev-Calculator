@@ -5,8 +5,31 @@ import { StyleSheet, Text, View,
 import { useState } from 'react';
 
 const screen = Dimensions.get("window");
-const btnWidth = screen.width / 4;
+const btnWidth = (screen.width / 4);
 const width = screen.width;
+const height = screen.height;
+let btnScale = btnWidth * 0.8;
+let fontSize = width * 0.06;
+let buttonPosLong = '40%';
+let btnMargin = '1%'
+
+console.log(width + ' X ' + height);
+
+// Set button and foint size for different devices
+if(height < 700) {
+  btnScale = btnWidth * 0.5;
+  fontSize = width * 0.05;
+  buttonPosLong = '60%';
+}
+else if(height > 900 && height < 1200) {
+  btnScale = btnWidth * 0.9;
+  fontSize = width * 0.07;
+  buttonPosLong = '35%';
+}
+else if(height > 1200 || width > 1200) {
+  btnScale = btnWidth * 0.4;
+  buttonPosLong = '80%';
+}
 
 export default function App() {
 
@@ -18,20 +41,20 @@ export default function App() {
 
   function buttonPressed(value) {
 
-    if (Number.isInteger(value) {
+    if (Number.isInteger(value) || value === '.') {
       handleNumber(value);
       setReadyToReplace(false);
     }
     // resets value to zero
-    else if(value === 'C') {
+    else if (value === 'C') {
       setAnswerValue(0);
       setMemoryValue(0);
       setOperatorValue(0);
       setReadyToReplace(true);
     }
     // Checks if input is an operator
-    else if(value === '/' || value === 'x' ||
-            value === '-' || value === '+') {
+    else if (value === '/' || value === 'x' ||
+      value === '-' || value === '+') {
       if (operatorValue !== 0) {
         setMemoryValue(calculatesEquals());
       }
@@ -40,37 +63,36 @@ export default function App() {
       setOperatorValue(value);
     }
     // Checks if equals and calls calculation function
-    else if(value === '=') {
+    else if (value === '=') {
       let calculation = calculatesEquals();
       setMemoryValue(0);
       setReadyToReplace(true);
 
       // Checks if sum is a number and returns error or value
-      if (isNaN(calculation)){
+      if (isNaN(calculation)) {
         setAnswerValue('Error')
-      }else{
+      } else {
         setAnswerValue(calculation);
       }
     }
     // Checks if positive or nagative and inverts value
-    else if(value === '+/-') {
-      if(answerValue < 0) {
+    else if (value === '+/-') {
+      if (answerValue < 0) {
         setAnswerValue(Math.abs(answerValue));
-      }
-      else if(answerValue > 0) {
+      } else if (answerValue > 0) {
         setAnswerValue(-Math.abs(answerValue));
       }
     }
     // Checks percentage and applies function
-    else if(value == '%') {
+    else if (value == '%') {
       setAnswerValue(answerValue * 0.01);
     }
   }
   // Function checks and concatanates numbers and returns value to display
   function handleNumber(value) {
-    if(readyToReplace) {
+    if (readyToReplace) {
       setAnswerValue(value);
-    }else{
+    } else {
       setAnswerValue(answerValue.toString() + value.toString());
     }
     return answerValue;
@@ -80,7 +102,7 @@ export default function App() {
     let previous = parseFloat(memoryValue);
     let current = parseFloat(answerValue);
 
-    if(previous === 'NaN' || current === 'NaN') {
+    if (previous === 'NaN' || current === 'NaN') {
       return 'Error';
     }
 
@@ -99,7 +121,7 @@ export default function App() {
   }
 
   return (
-    <View style={[styles.container]}>
+    <View style={styles.container}>
       <SafeAreaView style={styles.container}>
         <Text style={styles.number}>{ answerValue }</Text>
 
@@ -201,7 +223,7 @@ const styles = StyleSheet.create({
   greyButton: {
     flex: 1,
     backgroundColor: '#a6a6a6',
-    height: btnWidth * 0.8,
+    height: btnScale,
     borderRadius: btnWidth,
     margin: '1%',
     alignItems: 'center',
@@ -211,18 +233,18 @@ const styles = StyleSheet.create({
   blueButton:{
     flex: 1,
     backgroundColor: '#0984e3',
-    height: btnWidth * 0.8,
+    height: btnScale,
     borderRadius: btnWidth,
-    margin: '1%',
+    margin: btnMargin,
     alignItems: 'center',
     justifyContent: 'center',
   },
   darkButton: {
     flex: 1,
     backgroundColor: '#333333',
-    height: btnWidth * 0.8,
+    height: btnScale,
     borderRadius: btnWidth,
-    margin: '1%',
+    margin: btnMargin,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -230,23 +252,23 @@ const styles = StyleSheet.create({
     flex: 2,
     flexDirection: 'row',
     backgroundColor: '#333333',
-    height: btnWidth * 0.8,
+    height: btnScale,
     borderRadius: btnWidth,
-    margin: '1%',
+    margin: btnMargin,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
   buttonText: {
-    fontSize: width * 0.06,
+    fontSize: fontSize,
     color: 'white',
   },
   buttonTextDark: {
-    fontSize: width * 0.06,
+    fontSize: fontSize,
     color: 'black',
   },
   buttonLongText:{
-    fontSize: width * 0.06,
+    fontSize: fontSize,
     color: 'white',
-    left: '40%'
+    left: buttonPosLong
   }
 });
