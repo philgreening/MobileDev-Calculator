@@ -18,7 +18,7 @@ export default function App() {
 
   function buttonPressed(value) {
 
-    if (Number.isInteger(value) || value === '.') {
+    if (Number.isInteger(value) {
       handleNumber(value);
       setReadyToReplace(false);
     }
@@ -39,13 +39,18 @@ export default function App() {
       setReadyToReplace(true);
       setOperatorValue(value);
     }
-    // Checks if equals and calls calcuation function
+    // Checks if equals and calls calculation function
     else if(value === '=') {
       let calculation = calculatesEquals();
-      calculatesEquals();
       setMemoryValue(0);
       setReadyToReplace(true);
-      setAnswerValue(calculation);
+
+      // Checks if sum is a number and returns error or value
+      if (isNaN(calculation)){
+        setAnswerValue('Error')
+      }else{
+        setAnswerValue(calculation);
+      }
     }
     // Checks if positive or nagative and inverts value
     else if(value === '+/-') {
@@ -70,10 +75,14 @@ export default function App() {
     }
     return answerValue;
   }
-  // Calculates equation and returns sum 
+  // Calculates equation and returns sum
   function calculatesEquals() {
     let previous = parseFloat(memoryValue);
     let current = parseFloat(answerValue);
+
+    if(previous === 'NaN' || current === 'NaN') {
+      return 'Error';
+    }
 
     switch (operatorValue) {
       case '/':
