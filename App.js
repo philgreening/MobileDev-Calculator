@@ -18,8 +18,9 @@ export default function App() {
 
   function buttonPressed(value) {
 
-    if (Number.isInteger(value)){
+    if (Number.isInteger(value) || value === '.') {
       handleNumber(value);
+      setReadyToReplace(false);
     }
     else if(value === 'C') { // resets value to zero
       setAnswerValue(0);
@@ -28,31 +29,62 @@ export default function App() {
       setReadyToReplace(true);
     }
     else if(value === '/' || value === 'x' || value === '-' || value === '+') {
+      if (operatorValue !== 0) {
+        console.log('operator value is ' + operatorValue)
+        setMemoryValue(calculatesEquals());
+      }
       setMemoryValue(answerValue);
       setReadyToReplace(true);
       setOperatorValue(value);
-      console.log(operatorValue, memoryValue);
+      console.log('memoryValue is ' + memoryValue)
+      // console.log(operatorValue, memoryValue);
     }
     else if(value === '=') {
-
+      let calculation = calculatesEquals();
+      calculatesEquals();
+      setMemoryValue(0);
+      setReadyToReplace(true);
+      setAnswerValue(calculation);
     }
-
+    else if(value === '+/-') {
+      if(answerValue < 0) {
+        setAnswerValue(Math.abs(answerValue));
+      }
+      else if(answerValue > 0) {
+        setAnswerValue(-Math.abs(answerValue));
+      }
+    }
+    else if(value == '%') {
+      setAnswerValue(answerValue * 0.01);
+    }
   }
 
   function handleNumber(value) {
     // alert('Called ' + value);
     if(readyToReplace) {
-      alert('rtr ' + value );
       setAnswerValue(value);
     }else{
-      alert('called');
       setAnswerValue(answerValue.toString() + value.toString());
     }
     return answerValue;
   }
 
   function calculatesEquals() {
-    
+    let previous = parseFloat(memoryValue);
+    let current = parseFloat(answerValue);
+
+    switch (operatorValue) {
+      case '/':
+        return previous / current;
+      case 'x':
+        return previous * current;
+      case '-':
+        return previous - current;
+      case '+':
+        return previous + current;
+      default:
+        return current;
+    }
   }
 
   return (
