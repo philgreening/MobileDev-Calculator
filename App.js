@@ -22,23 +22,24 @@ export default function App() {
       handleNumber(value);
       setReadyToReplace(false);
     }
-    else if(value === 'C') { // resets value to zero
+    // resets value to zero
+    else if(value === 'C') {
       setAnswerValue(0);
       setMemoryValue(0);
       setOperatorValue(0);
       setReadyToReplace(true);
     }
-    else if(value === '/' || value === 'x' || value === '-' || value === '+') {
+    // Checks if input is an operator
+    else if(value === '/' || value === 'x' ||
+            value === '-' || value === '+') {
       if (operatorValue !== 0) {
-        console.log('operator value is ' + operatorValue)
         setMemoryValue(calculatesEquals());
       }
       setMemoryValue(answerValue);
       setReadyToReplace(true);
       setOperatorValue(value);
-      console.log('memoryValue is ' + memoryValue)
-      // console.log(operatorValue, memoryValue);
     }
+    // Checks if equals and calls calcuation function
     else if(value === '=') {
       let calculation = calculatesEquals();
       calculatesEquals();
@@ -46,6 +47,7 @@ export default function App() {
       setReadyToReplace(true);
       setAnswerValue(calculation);
     }
+    // Checks if positive or nagative and inverts value
     else if(value === '+/-') {
       if(answerValue < 0) {
         setAnswerValue(Math.abs(answerValue));
@@ -54,13 +56,13 @@ export default function App() {
         setAnswerValue(-Math.abs(answerValue));
       }
     }
+    // Checks percentage and applies function
     else if(value == '%') {
       setAnswerValue(answerValue * 0.01);
     }
   }
-
+  // Function checks and concatanates numbers and returns value to display
   function handleNumber(value) {
-    // alert('Called ' + value);
     if(readyToReplace) {
       setAnswerValue(value);
     }else{
@@ -68,7 +70,7 @@ export default function App() {
     }
     return answerValue;
   }
-
+  // Calculates equation and returns sum 
   function calculatesEquals() {
     let previous = parseFloat(memoryValue);
     let current = parseFloat(answerValue);
