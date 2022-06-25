@@ -3,19 +3,21 @@ import { StyleSheet, Text, View,
          Dimensions, SafeAreaView,
          TouchableOpacity } from 'react-native';
 import { useState } from 'react';
+import { useFonts } from 'expo-font';
 
+//Variables to store screen dimensions
 const screen = Dimensions.get("window");
 const btnWidth = (screen.width / 4);
 const width = screen.width;
 const height = screen.height;
+
+//Variables for responsive layout
 let btnScale = btnWidth * 0.8;
 let fontSize = width * 0.06;
 let buttonPosLong = '40%';
 let btnMargin = '1%'
 
-console.log(width + ' X ' + height);
-
-// Set button and foint size for different devices
+// Set button and font size for different devices
 if(height < 700) {
   btnScale = btnWidth * 0.5;
   fontSize = width * 0.05;
@@ -26,7 +28,7 @@ else if(height > 900 && height < 1200) {
   fontSize = width * 0.07;
   buttonPosLong = '35%';
 }
-else if(height > 1200 || width > 1200) {
+else if(height > 1200) {
   btnScale = btnWidth * 0.4;
   buttonPosLong = '80%';
 }
@@ -35,9 +37,17 @@ export default function App() {
 
   const [answerValue, setAnswerValue] = useState(0);
   const [readyToReplace, setReadyToReplace] = useState(true)
-
   const [memoryValue, setMemoryValue] = useState(0);
   const [operatorValue, setOperatorValue] = useState(0);
+
+  //Load custom font
+  let [fontsLoaded] = useFonts({
+  'Pocket-Calculator': require('./assets/fonts/pocket_calc_ot.otf'),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   function buttonPressed(value) {
 
@@ -212,6 +222,7 @@ const styles = StyleSheet.create({
     padding: '3%',
   },
   number: {
+    fontFamily: 'Pocket-Calculator',
     textAlign: 'center',
     color: 'white',
     fontSize: width * 0.2,
